@@ -2,7 +2,7 @@
 using System.Collections;
 
 //Controls the movement of the tank
-public class movement : MonoBehaviour {
+public class Movement : MonoBehaviour {
 
 	public Rigidbody rb;
 	public float speed = 90f;

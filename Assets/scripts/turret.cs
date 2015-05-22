@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class turret : MonoBehaviour {
+public class Turret : MonoBehaviour {
 
 	public float XSensitivity = 2f;
 	public float YSensitivity = 2f;
+	public float MaxCannonPitch = 30f;
+	public float MinCannonPitch = -25f;
 	private Quaternion m_turretTargetRot;
-	private Quaternion m_cannonTargetRot;
 	private GameObject cannonObject;
+	private float rotationX;
 
 
 	void Awake()
@@ -15,7 +17,7 @@ public class turret : MonoBehaviour {
 		Screen.lockCursor = true;
 		m_turretTargetRot = transform.localRotation;
 		cannonObject = gameObject.transform.Find ("cannon").gameObject;
-		m_cannonTargetRot = cannonObject.transform.localRotation;
+		rotationX = cannonObject.transform.localEulerAngles.x;
 	}
 	
 	// Update is called once per frame
@@ -30,7 +32,8 @@ public class turret : MonoBehaviour {
 		transform.localRotation = m_turretTargetRot;
 
 		//Rotates the barrel
-		m_cannonTargetRot *= Quaternion.Euler (-xRot, 0f, 0f);
-		cannonObject.transform.localRotation = m_cannonTargetRot;
+		rotationX += xRot;
+		rotationX = Mathf.Clamp (rotationX, MinCannonPitch, MaxCannonPitch);             
+		cannonObject.transform.localEulerAngles = new Vector3(-rotationX, cannonObject.transform.localEulerAngles.y, cannonObject.transform.localEulerAngles.z);
 	}
 }

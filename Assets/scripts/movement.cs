@@ -12,6 +12,7 @@ public class movement : MonoBehaviour {
 	private float powerInput;
 	private float turnInput;
 
+	//Used to ray trace from
 	public GameObject body;
 
 	//On load of the object

@@ -8,7 +8,7 @@ public class Cannon : MonoBehaviour {
 	public GameObject bulletPrefab;
 	public int reloadTicks = 0;
 	public int reloadDelay = 100;
-	public int bulletForce = 100;
+	public int bulletForce = 10000;
 	
 	// Update is called once per frame
 	void Update () 

@@ -41,7 +41,7 @@ public class Cannon : MonoBehaviour {
 		//TODO play firing audio
 		reloadTicks = reloadDelay;
 		GameObject bullet = Instantiate(bulletPrefab, firingNode.transform.position, Quaternion.identity) as GameObject;
-		bullet.transform.rotation = transform.localRotation;
+		bullet.transform.rotation = transform.rotation;
 		bullet.GetComponent<Rigidbody>().AddRelativeForce (0f, 0f, bulletForce);
 		bullet.GetComponent<Bullet> ().shooter = shooter;
 	}

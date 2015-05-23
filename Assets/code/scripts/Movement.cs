@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour {
 	public float turnSpeed = 5f;
 	public float hoverForce = 65f;
 	public float hoverHeight = 2.5f;
+	public float tiltChangeValue = 0.1f;
 	
 	//Objects
 	public Rigidbody rb;
@@ -87,16 +88,22 @@ public class Movement : MonoBehaviour {
 	//Handles all hover code
 	void HandleHoverRays()
 	{
+		//Raycast all 4 corners strait down
 		Physics.Raycast(backLeft.position + Vector3.up, Vector3.down, out lr);
 		Physics.Raycast(backRight.position + Vector3.up, Vector3.down, out rr);
 		Physics.Raycast(frontLeft.position + Vector3.up, Vector3.down, out lf);
 		Physics.Raycast(frontRight.position + Vector3.up, Vector3.down, out rf);
- 
-		transform.up = (Vector3.Cross(rr.point - Vector3.up, lr.point - Vector3.up) +
-              Vector3.Cross(lr.point - Vector3.up, lf.point - Vector3.up) +
-              Vector3.Cross(lf.point - Vector3.up, rf.point - Vector3.up) +
-              Vector3.Cross(rf.point - Vector3.up, rr.point - Vector3.up)
-             ).normalized;
+ 		
+		//calculate new up
+		Vector3 newUp = (Vector3.Cross (rr.point - Vector3.up, lr.point - Vector3.up) +
+			Vector3.Cross (lr.point - Vector3.up, lf.point - Vector3.up) +
+			Vector3.Cross (lf.point - Vector3.up, rf.point - Vector3.up) +
+			Vector3.Cross (rf.point - Vector3.up, rr.point - Vector3.up)).normalized;
+
+		//Slow rotation to prevent screen rapid motion
+		transform.up = Vector3.Slerp(transform.up, newUp, tiltChangeValue);
+
+		//Debug info
 		Debug.DrawRay(rr.point, Vector3.up);
 		Debug.DrawRay(lr.point, Vector3.up);
 		Debug.DrawRay(lf.point, Vector3.up);

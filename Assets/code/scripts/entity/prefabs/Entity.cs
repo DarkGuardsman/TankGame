@@ -41,15 +41,12 @@ public class Entity : MonoBehaviour, IEntity {
 	/// <param name="damage">amount of damage to doDamage.</param>
 	protected virtual bool AttackGameObjectOnly(GameObject target, DamageSource source, float damage)
 	{
-		Debug.Log ("Attacking object " + target);
 		bool damagedTarget = false;
 		IEntity[] scripts = target.GetComponents<IEntity>();
 		for(int i = 0; i < scripts.Length; i++)
 		{
-			Debug.Log ("\tIEntity " + scripts[i]);
 			if(scripts[i].damageEntity(source, damage))
 			{
-				Debug.Log ("\t\tTook Damage");
 				damagedTarget = true;
 			}
 		}

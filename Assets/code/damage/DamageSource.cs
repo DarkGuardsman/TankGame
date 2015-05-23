@@ -15,11 +15,20 @@ namespace BuiltBroken.Damage
 			this.name = name;
 		}
 
+		//TODO add bool types(explosion, fire, projectile, majic, bypass armor, bypass all)
 	}
 
 	public class BulletDamageSource : DamageSource
 	{
 		public BulletDamageSource (GameObject shooter) : base("Bullet")
+		{
+			this.source = shooter;
+		}
+	}
+
+	public class ExplosionDamageSource : DamageSource
+	{
+		public ExplosionDamageSource (GameObject shooter) : base("Explosion")
 		{
 			this.source = shooter;
 		}

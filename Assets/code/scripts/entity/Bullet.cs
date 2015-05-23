@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuiltBroken.Damage;
 
-public class Bullet : MonoBehaviour {
+public class Bullet : Entity {
 
 	public GameObject shooter;
+	public float damage = 25f;
 	public int MAX_TICKS = 10000;
 	private int ticks = 0;
 
@@ -25,7 +27,15 @@ public class Bullet : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision collision)
 	{
-		Debug.Log ("Bullet Impact");
+		//Create damage source
+		DamageSource damageSource;
+		if (shooter != null) {
+			damageSource = new BulletDamageSource(shooter);
+		} else {
+			damageSource = new BulletDamageSource(gameObject);
+		}
+
+		this.AttackGameObject (collision.gameObject, damageSource, damage);
 		Destroy(gameObject);
-	}
+	}	
 }

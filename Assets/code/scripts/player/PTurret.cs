@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Turret : MonoBehaviour {
+public class PTurret : MonoBehaviour {
 
 	public float XSensitivity = 2f;
 	public float YSensitivity = 2f;

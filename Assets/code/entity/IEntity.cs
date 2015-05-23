@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BuiltBroken.Damage;
 /// <summary>
 /// Basic interface to be aplied gameobjects that can take damage
 /// </summary>
@@ -23,7 +24,7 @@ public interface IEntity {
 	///</summary>
 	///<remarks>TODO add damage type</remarks>
 	/// <returns>True if the entity was damaged</returns>
-	bool damageEntity(float damage);
+	bool damageEntity(DamageSource source, float damage);
 
 	///<summary>
 	///Checks to see if the entity is dead

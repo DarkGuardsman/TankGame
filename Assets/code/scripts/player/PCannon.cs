@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Cannon : MonoBehaviour {
+public class PCannon : MonoBehaviour {
 
 	public GameObject shooter;
 	public GameObject firingNode;

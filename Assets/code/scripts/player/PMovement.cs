@@ -19,6 +19,4 @@ public class PMovement : MonoBehaviour {
 		engine.powerInput = Input.GetAxis ("Vertical");
 		engine.turnInput = Input.GetAxis ("Horizontal");
 	}
-
-
 }

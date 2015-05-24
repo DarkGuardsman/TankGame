@@ -6,8 +6,30 @@ using BuiltBroken.Damage;
 /// </summary>
 public class Entity : MonoBehaviour, IEntity {
 
-	private float hp;
-	protected bool alive = true;
+	public float hp = 1;
+	public int deathTicks = -10;
+	public bool alive = true;
+
+	// Update is called once per frame
+	protected virtual void Update () {
+		if(hp <= 0 && alive)
+		{
+			alive = false;
+			OnDeath();
+		}
+
+		if(isDead()) {
+			if(deathTicks != -10)
+			{
+				deathTicks--;
+				if(deathTicks <= 0)
+				{
+					BeforeDestroyed();
+					Destroy(gameObject);
+				}
+			}
+		}
+	}
 
 	public virtual float getHeath()
 	{
@@ -31,6 +53,24 @@ public class Entity : MonoBehaviour, IEntity {
 	public virtual bool isDead()
 	{
 		return !alive;
+	}
+
+	/// <summary>
+	/// Called the first tick after the entity has died
+	/// </summary>
+	protected virtual void OnDeath()
+	{
+
+	}
+
+	/// <summary>
+	/// Called in the death update loop right before the game object is destoryed
+	/// </summary>
+	protected virtual void BeforeDestroyed()
+	{
+		if (gameObject.tag == "Player") {
+
+		}
 	}
 
 	/// <summary>
@@ -65,7 +105,7 @@ public class Entity : MonoBehaviour, IEntity {
 		GameObject parent = target;
 		while (parent != null) 
 		{
-			if (target.tag == "Entity" && AttackGameObjectOnly(target, source, damage)) {
+			if ((target.tag == "Entity" || target.tag == "Player") && AttackGameObjectOnly(target, source, damage)) {
 				return true;
 			}
 			if(parent.transform == null || parent.transform.parent == null)

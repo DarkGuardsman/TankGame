@@ -22,7 +22,7 @@ public class HoverEngine : MovementEngine {
 	private RaycastHit rf;
 
 	//On load of the object
-	void Awake()
+	protected override void Awake()
 	{
 		base.Awake ();
 		//Only populate if empty, allows manual setting of trace points
@@ -33,7 +33,7 @@ public class HoverEngine : MovementEngine {
 	}
 
 	//Called each normal update
-	void FixedUpdate()
+	protected override void FixedUpdate()
 	{
 		base.FixedUpdate ();
 		HandleHoverRays();

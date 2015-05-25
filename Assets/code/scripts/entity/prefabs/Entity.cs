@@ -60,7 +60,13 @@ public class Entity : MonoBehaviour, IEntity {
 	/// </summary>
 	protected virtual void OnDeath()
 	{
-
+		if (gameObject.tag == "Player") {
+			//Disable camera
+			Camera.main.enabled = false;
+			
+			//Create new camera object for the player
+			Instantiate(Resources.Load("camera_dummy"), transform.position, Quaternion.identity);
+		}
 	}
 
 	/// <summary>
@@ -68,9 +74,7 @@ public class Entity : MonoBehaviour, IEntity {
 	/// </summary>
 	protected virtual void BeforeDestroyed()
 	{
-		if (gameObject.tag == "Player") {
 
-		}
 	}
 
 	/// <summary>

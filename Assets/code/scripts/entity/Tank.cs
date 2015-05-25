@@ -44,11 +44,12 @@ public class Tank : Entity
 			//Disable cannon firing script
 			cannon.GetComponent<PCannon>().enabled = false;
 
-			//Disable camera
-			turret.transform.FindChild("Main Camera").gameObject.GetComponent<Camera>().enabled = false;
 
-			//Create new camera object for the player
-			Instantiate(dummyCameraPrefab, transform.position, Quaternion.identity);
 		}
+	}
+
+	protected override void BeforeDestroyed()
+	{
+		base.BeforeDestroyed ();
 	}
 }

@@ -12,7 +12,6 @@ public class Bullet : Entity {
 
 	// Use this for initialization
 	void Start () {
-		prev_pos = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -24,9 +23,6 @@ public class Bullet : Entity {
 			Destroy(gameObject);
 			return;
 		}
-
-		Physics.Linecast (transform.position, prev_pos);
-		prev_pos = transform.position;
 	}
 	
 	

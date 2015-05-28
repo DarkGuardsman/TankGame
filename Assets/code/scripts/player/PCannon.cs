@@ -6,40 +6,69 @@ public class PCannon : MonoBehaviour {
 	public GameObject shooter;
 	public GameObject firingNode;
 	public GameObject bulletPrefab;
-	public int reloadTicks = 0;
-	public int reloadDelay = 100;
-	public int bulletForce = 10000;
+
+	[HideInInspector]
+	public float firingDelayTicks = 0;
+	[HideInInspector]
+	public float reloadDelayTicks = 0;
+	[HideInInspector]
+	public int roundsLeft = 0;
+
+	public int ammoPerReload = 1;
+	public float firingDelaySeconds = 0.1f;
+	public float reloadSpeedSeconds = 20f;
+	public float bulletForce = 1000f;
+	
+	public bool fullAuto = false;
 	
 	// Update is called once per frame
 	void Update () 
-	{        
-        //if (Input.GetMouseButtonDown(1)) TODO use to lock turret rotation
-        //    Debug.Log("Pressed right click.");
-        
-        //if (Input.GetMouseButtonDown(2)) TODO switch ammo?
-        //    Debug.Log("Pressed middle click.");
-		
-		if (reloadTicks <= 0) 
+	{                
+		if (roundsLeft > 0) 
 		{
-			if (Input.GetMouseButtonDown(0))
+			//Firing delay
+			if (firingDelayTicks <= 0) 
 			{
-				Fire ();
+				if (userClickFire()) 
+				{
+					Fire ();
+					roundsLeft--;
+				}
+			} 
+			else 
+			{
+				if (userClickFire()) 
+				{
+					//TODO play weapon click audio
+				}
+				firingDelayTicks -= Time.deltaTime;
 			}
+
+			//Starts reloading process
+			if(roundsLeft <= 0)
+			{
+				reloadDelayTicks = reloadSpeedSeconds;
+			}
+		} 
+		else if (reloadDelayTicks <= 0) 
+		{
+			roundsLeft = ammoPerReload;
 		} 
 		else 
 		{
-			if (Input.GetMouseButtonDown(0))
-			{
-				//TODO play weapon click audio
-			}
-			reloadTicks--;
+			reloadDelayTicks -= Time.deltaTime;
 		}
+	}
+
+	protected virtual bool userClickFire()
+	{
+		return !fullAuto && Input.GetMouseButtonDown (0) || fullAuto && Input.GetMouseButton (0);
 	}
 
 	void Fire()
 	{
 		//TODO play firing audio
-		reloadTicks = reloadDelay;
+		firingDelayTicks = firingDelaySeconds;
 		GameObject bullet = Instantiate(bulletPrefab, firingNode.transform.position, Quaternion.identity) as GameObject;
 		bullet.transform.rotation = transform.rotation;
 		bullet.GetComponent<Rigidbody>().AddRelativeForce (0f, 0f, bulletForce);

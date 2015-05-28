@@ -8,10 +8,11 @@ public class Bullet : Entity {
 	public float damage = 25f;
 	public int MAX_TICKS = 10000;
 	private int ticks = 0;
+	private Vector3 prev_pos;
 
 	// Use this for initialization
 	void Start () {
-	
+		prev_pos = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -21,7 +22,11 @@ public class Bullet : Entity {
 		if(ticks >= MAX_TICKS)
 		{
 			Destroy(gameObject);
+			return;
 		}
+
+		Physics.Linecast (transform.position, prev_pos);
+		prev_pos = transform.position;
 	}
 	
 	

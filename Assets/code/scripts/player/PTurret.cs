@@ -7,6 +7,7 @@ public class PTurret : MonoBehaviour {
 	public float YSensitivity = 2f;
 	public float MaxCannonPitch = 30f;
 	public float MinCannonPitch = -25f;
+
 	private Quaternion m_turretTargetRot;
 	private GameObject cannonObject;
 	private float rotationX;

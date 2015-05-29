@@ -97,6 +97,11 @@ public class Entity : MonoBehaviour, IEntity {
 		return damagedTarget;
 	}
 
+	public static bool IsEntity(GameObject obj)
+	{
+		return obj.tag == "Entity" || obj.tag == "Player";
+	}
+
 	/// <summary>
 	/// Iterates threw object & it's parent objects to find an Entity tag. Once it finds
 	/// a matching object it attacks the object if it has an IEntity script.
@@ -109,7 +114,7 @@ public class Entity : MonoBehaviour, IEntity {
 		GameObject parent = target;
 		while (parent != null) 
 		{
-			if ((target.tag == "Entity" || target.tag == "Player") && AttackGameObjectOnly(target, source, damage)) {
+			if (IsEntity(target) && AttackGameObjectOnly(target, source, damage)) {
 				return true;
 			}
 			if(parent.transform == null || parent.transform.parent == null)

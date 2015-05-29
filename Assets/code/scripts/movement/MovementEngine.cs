@@ -7,7 +7,8 @@ using System.Collections;
 public abstract class MovementEngine : MonoBehaviour {
 
 	//Attached objects
-	public GameObject centerOfMass = null;	
+	public GameObject centerOfMass = null;
+	[HideInInspector]
 	public Rigidbody rigidbody;
 
 	//Settings

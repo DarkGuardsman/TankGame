@@ -49,7 +49,7 @@ public class AITurret : MonoBehaviour
 			desiredRotation = Quaternion.LookRotation (target.transform.position - transform.position).eulerAngles;
 
 			cannon.GetComponent<AICannon> ().fire = Vector3.Distance (desiredRotation, new Vector3 (cannon.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z)) <= firingAngle;
-			Debug.Log (desiredRotation + "   T:" + transform.eulerAngles + "  C:" + cannon.eulerAngles + "  F:" + cannon.GetComponent<AICannon> ().fire + "  CF:" + cannon.GetComponent<AICannon> ().CanFire ());
+			//Debug.Log (desiredRotation + "   T:" + transform.eulerAngles + "  C:" + cannon.eulerAngles + "  F:" + cannon.GetComponent<AICannon> ().fire + "  CF:" + cannon.GetComponent<AICannon> ().CanFire ());
 		} else {
 			//If target is not valid count down until target lost
 			targetLostTicks -= Time.deltaTime;

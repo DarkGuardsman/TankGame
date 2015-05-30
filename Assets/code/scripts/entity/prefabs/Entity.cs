@@ -87,7 +87,7 @@ public class Entity : MonoBehaviour, IEntity
 	{
 		if (IsEntity (obj)) {
 			IEntity ent = obj.GetComponent<IEntity> ();
-			return ent != null && !ent.isDead () && ent.getTeam () != team;
+			return ent != null && !ent.isDead () && ent.getTeam () != team && ent.getTeam () != TEAM.OTHER;
 		}
 		return false;
 	}
@@ -122,19 +122,12 @@ public class Entity : MonoBehaviour, IEntity
 	/// <param name="damage">amount of damage to doDamage.</param>
 	protected virtual bool AttackGameObjectOnly (GameObject target, DamageSource source, float damage)
 	{
-		bool damagedTarget = false;
-		IEntity[] scripts = target.GetComponents<IEntity> ();
-		for (int i = 0; i < scripts.Length; i++) {
-			if (scripts [i].damageEntity (source, damage)) {
-				damagedTarget = true;
-			}
-		}
-		return damagedTarget;
+		return target.GetComponent<IEntity> ().damageEntity (source, damage);
 	}
 
 	public static bool IsEntity (GameObject obj)
 	{
-		return obj != null && (obj.tag == "Entity" || obj.tag == "Player");
+		return obj.tag == "Entity" || obj.tag == "Player";
 	}
 
 	/// <summary>
@@ -148,7 +141,8 @@ public class Entity : MonoBehaviour, IEntity
 	{
 		GameObject parent = target;
 		while (parent != null) {
-			if (IsEntity (target) && AttackGameObjectOnly (target, source, damage)) {
+
+			if (IsEntity (parent) && AttackGameObjectOnly (parent, source, damage)) {
 				return true;
 			}
 			if (parent.transform == null || parent.transform.parent == null) {

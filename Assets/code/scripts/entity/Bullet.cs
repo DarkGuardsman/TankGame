@@ -2,7 +2,8 @@
 using System.Collections;
 using BuiltBroken.Damage;
 
-public class Bullet : Entity {
+public class Bullet : Entity
+{
 
 	public GameObject shooter;
 	public float damage = 25f;
@@ -11,32 +12,33 @@ public class Bullet : Entity {
 	private Vector3 prev_pos;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void FixedUpdate ()
+	{
 		//Ensure the bullet dies if no collision happens
 		ticks++;
-		if(ticks >= MAX_TICKS)
-		{
-			Destroy(gameObject);
+		if (ticks >= MAX_TICKS) {
+			Destroy (gameObject);
 			return;
 		}
 	}
 	
 	
-	void OnCollisionEnter(Collision collision)
+	void OnCollisionEnter (Collision collision)
 	{
 		//Create damage source
 		DamageSource damageSource;
 		if (shooter != null) {
-			damageSource = new BulletDamageSource(shooter);
+			damageSource = new BulletDamageSource (shooter);
 		} else {
-			damageSource = new BulletDamageSource(gameObject);
+			damageSource = new BulletDamageSource (gameObject);
 		}
 
 		this.AttackGameObject (collision.gameObject, damageSource, damage);
-		Destroy(gameObject);
+		Destroy (gameObject);
 	}	
 }

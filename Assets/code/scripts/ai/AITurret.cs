@@ -29,10 +29,8 @@ public class AITurret : MonoBehaviour
 
 	void Update ()
 	{
-		if (desiredRotation != null) {
-			transform.eulerAngles = Vector3.Slerp (transform.eulerAngles, new Vector3 (transform.eulerAngles.x, desiredRotation.y, transform.eulerAngles.z), Time.deltaTime * turnSpeed);
-			cannon.eulerAngles = Vector3.Slerp (cannon.eulerAngles, new Vector3 (desiredRotation.x, cannon.eulerAngles.y, cannon.eulerAngles.z), Time.deltaTime * turnSpeed);
-		}
+		transform.eulerAngles = Vector3.Slerp (transform.eulerAngles, new Vector3 (transform.eulerAngles.x, desiredRotation.y, transform.eulerAngles.z), Time.deltaTime * turnSpeed);
+		cannon.eulerAngles = Vector3.Slerp (cannon.eulerAngles, new Vector3 (desiredRotation.x, cannon.eulerAngles.y, cannon.eulerAngles.z), Time.deltaTime * turnSpeed);
 	}
 
 	void FixedUpdate ()

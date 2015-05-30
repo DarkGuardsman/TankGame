@@ -3,13 +3,11 @@ using System.Collections;
 
 public class Tank : Entity
 {	
-	public GameObject dummyCameraPrefab;
-
 	private GameObject turret;
 	private GameObject hull;
 	private GameObject cannon;
 
-	void Awake()
+	void Awake ()
 	{
 		//TODO replace with iterator that finds all materials and replaces with grey
 		turret = gameObject.transform.FindChild ("turret").gameObject;
@@ -17,7 +15,7 @@ public class Tank : Entity
 		cannon = turret.transform.FindChild ("cannon").gameObject;
 	}
 
-	protected override void OnDeath()
+	protected override void OnDeath ()
 	{
 		base.OnDeath ();
 
@@ -25,30 +23,29 @@ public class Tank : Entity
 
 		//Turn off all engines, its dead so it can't move
 		MovementEngine[] engines = gameObject.GetComponents<MovementEngine> ();
-		foreach(MovementEngine e in engines)
-		{
+		foreach (MovementEngine e in engines) {
 			e.enabled = false;
 		}
 
-		turret.transform.FindChild ("body").gameObject.GetComponent<Renderer>().material.color = Color.gray;
-		cannon.transform.FindChild ("barrel").gameObject.GetComponent<Renderer>().material.color = Color.gray;
-		hull.GetComponent<Renderer>().material.color = Color.gray;
+		turret.transform.FindChild ("body").gameObject.GetComponent<Renderer> ().material.color = Color.gray;
+		cannon.transform.FindChild ("barrel").gameObject.GetComponent<Renderer> ().material.color = Color.gray;
+		hull.GetComponent<Renderer> ().material.color = Color.gray;
 
 		if (gameObject.tag == "Player") {
 			//Disable movement script
-			gameObject.GetComponent<PMovement>().enabled = false;
+			gameObject.GetComponent<PMovement> ().enabled = false;
 
 			//Disable turret rotation script
-			turret.GetComponent<PTurret>().enabled = false;
+			turret.GetComponent<PTurret> ().enabled = false;
 
 			//Disable cannon firing script
-			cannon.GetComponent<PCannon>().enabled = false;
+			cannon.GetComponent<PCannon> ().enabled = false;
 
 
 		}
 	}
 
-	protected override void BeforeDestroyed()
+	protected override void BeforeDestroyed ()
 	{
 		base.BeforeDestroyed ();
 	}

@@ -86,8 +86,8 @@ public class Entity : MonoBehaviour, IEntity
 	public virtual bool IsValidTarget (GameObject obj)
 	{
 		if (IsEntity (obj)) {
-			IEntity ent = obj.GetComponents<IEntity> ();
-			return ent != null && !ent.isDead () && ent.getTeam != team;
+			IEntity ent = obj.GetComponent<IEntity> ();
+			return ent != null && !ent.isDead () && ent.getTeam () != team;
 		}
 		return false;
 	}
@@ -134,7 +134,7 @@ public class Entity : MonoBehaviour, IEntity
 
 	public static bool IsEntity (GameObject obj)
 	{
-		return obj.tag == "Entity" || obj.tag == "Player";
+		return obj != null && (obj.tag == "Entity" || obj.tag == "Player");
 	}
 
 	/// <summary>

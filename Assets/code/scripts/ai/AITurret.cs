@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AI_Turret : MonoBehaviour
+public class AITurret : MonoBehaviour
 {
 
 	public GameObject target;
@@ -10,7 +10,6 @@ public class AI_Turret : MonoBehaviour
 	public Transform cannon;
 
 	public float speed = 3f;
-	public float errorAmount = .1f;
 	public float turnSpeed = 10f;
 	public float firingAngle = .04f;
 	public int targetLostSeconds = 10;
@@ -49,8 +48,8 @@ public class AI_Turret : MonoBehaviour
 			targetLostTicks = targetLostSeconds;
 			desiredRotation = Quaternion.LookRotation (target.transform.position - transform.position).eulerAngles;
 
-			cannon.GetComponent<AI_Cannon> ().fire = Vector3.Distance (desiredRotation, new Vector3 (cannon.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z)) <= firingAngle;
-			Debug.Log (desiredRotation + "   T:" + transform.eulerAngles + "  C:" + cannon.eulerAngles + "  F:" + cannon.GetComponent<AI_Cannon> ().fire + "  CF:" + cannon.GetComponent<AI_Cannon> ().CanFire ());
+			cannon.GetComponent<AICannon> ().fire = Vector3.Distance (desiredRotation, new Vector3 (cannon.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z)) <= firingAngle;
+			Debug.Log (desiredRotation + "   T:" + transform.eulerAngles + "  C:" + cannon.eulerAngles + "  F:" + cannon.GetComponent<AICannon> ().fire + "  CF:" + cannon.GetComponent<AICannon> ().CanFire ());
 		} else {
 			//If target is not valid count down until target lost
 			targetLostTicks -= Time.deltaTime;
@@ -63,8 +62,8 @@ public class AI_Turret : MonoBehaviour
 	bool canSeeTarget (Transform tran)
 	{
 		RaycastHit hit;
-		bool hitSomething = Physics.Raycast (tran.position, cannon.GetComponent<AI_Cannon> ().firingNode.transform.position - tran.position, out hit);
-		Debug.DrawLine (cannon.GetComponent<AI_Cannon> ().firingNode.transform.position, hit.point, Color.yellow);
+		bool hitSomething = Physics.Raycast (tran.position, cannon.GetComponent<AICannon> ().firingNode.transform.position - tran.position, out hit);
+		Debug.DrawLine (cannon.GetComponent<AICannon> ().firingNode.transform.position, hit.point, Color.yellow);
 		return  hitSomething && hit.transform == tran;
 	}
 
@@ -78,12 +77,14 @@ public class AI_Turret : MonoBehaviour
 		GameObject bestTarget = null;
 		float distance = 1000;
 		foreach (Object obj in targetList) {
-			GameObject potentialTarget = obj as GameObject;
-			if (isValidTarget (potentialTarget)) {
-				float d = Vector3.Distance (potentialTarget.transform.position, transform.position);
-				if (d < distance) {
-					distance = d;
-					bestTarget = potentialTarget;
+			if (obj != null) {
+				GameObject potentialTarget = obj as GameObject;
+				if (isValidTarget (potentialTarget)) {
+					float d = Vector3.Distance (potentialTarget.transform.position, transform.position);
+					if (d < distance) {
+						distance = d;
+						bestTarget = potentialTarget;
+					}
 				}
 			}
 		}
@@ -107,10 +108,5 @@ public class AI_Turret : MonoBehaviour
 		if (targetList.Contains (other.gameObject)) {
 			targetList.Remove (other.gameObject);
 		}
-	}
-	
-	float rollRandomError ()
-	{
-		return Random.Range (-errorAmount, errorAmount);
 	}
 }

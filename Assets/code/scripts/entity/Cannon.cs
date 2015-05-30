@@ -37,6 +37,7 @@ public abstract class Cannon : MonoBehaviour
 	public float reloadSpeedSeconds = 20f;
 	//force to apply to the bullet
 	public float bulletForce = 1000f;
+	public float errorAmount = .01f;
 	
 	public bool fullAuto = false;
 	public bool unlimitedAmmo = false;
@@ -74,7 +75,7 @@ public abstract class Cannon : MonoBehaviour
 	
 	public abstract bool ShouldFire ();
 	
-	protected virtual void Fire ()
+	protected virtual GameObject Fire ()
 	{
 		if (!unlimitedAmmo) {
 			roundsLeft--;
@@ -86,8 +87,14 @@ public abstract class Cannon : MonoBehaviour
 		//TODO play firing audio
 		firingDelayTicks = firingDelaySeconds;
 		GameObject bullet = Instantiate (bulletPrefab, firingNode.transform.position, Quaternion.identity) as GameObject;
-		bullet.transform.rotation = transform.rotation;
+		bullet.transform.eulerAngles = new Vector3 (transform.eulerAngles.x + rollRandomError (), transform.eulerAngles.y + rollRandomError (), transform.eulerAngles.z + rollRandomError ());
 		bullet.GetComponent<Rigidbody> ().AddRelativeForce (0f, 0f, bulletForce);
 		bullet.GetComponent<Bullet> ().shooter = shooter;
+		return bullet;
+	}
+
+	float rollRandomError ()
+	{
+		return Random.Range (-errorAmount, errorAmount);
 	}
 }

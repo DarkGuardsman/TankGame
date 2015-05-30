@@ -77,7 +77,7 @@ public abstract class Cannon : MonoBehaviour
 	
 	protected virtual GameObject Fire ()
 	{
-		if (!unlimitedAmmo) {
+		if (!unlimitedAmmo && ammoPerReload <= 1) {
 			roundsLeft--;
 			if (roundsLeft <= 0) {
 				reloadDelayTicks = reloadSpeedSeconds;

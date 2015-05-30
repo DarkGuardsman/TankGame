@@ -86,6 +86,8 @@ public class AITurret : MonoBehaviour
 						bestTarget = potentialTarget;
 					}
 				}
+			} else {
+				Debug.Log ("Null? " + obj);
 			}
 		}
 		target = bestTarget;

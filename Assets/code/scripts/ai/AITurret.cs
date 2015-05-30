@@ -60,7 +60,7 @@ public class AITurret : MonoBehaviour
 	bool canSeeTarget (Transform tran)
 	{
 		RaycastHit hit;
-		bool hitSomething = Physics.Raycast (tran.position, cannon.GetComponent<AICannon> ().firingNode.transform.position - tran.position, out hit);
+		bool hitSomething = Physics.Linecast (transform.position, tran.position, out hit);
 		Debug.DrawLine (cannon.GetComponent<AICannon> ().firingNode.transform.position, hit.point, Color.yellow);
 		return  hitSomething && hit.transform == tran;
 	}
@@ -75,29 +75,28 @@ public class AITurret : MonoBehaviour
 		GameObject bestTarget = null;
 		float distance = 1000;
 		foreach (Object obj in targetList) {
-			if (obj != null) {
-				GameObject potentialTarget = obj as GameObject;
-				if (isValidTarget (potentialTarget)) {
-					float d = Vector3.Distance (potentialTarget.transform.position, transform.position);
-					if (d < distance) {
-						distance = d;
-						bestTarget = potentialTarget;
-					}
+			GameObject potentialTarget = obj as GameObject;
+			//Debug.Log ("Searching for target, testing " + potentialTarget + "  " + isValidTarget (potentialTarget));
+			if (isValidTarget (potentialTarget)) {
+				float d = Vector3.Distance (potentialTarget.transform.position, transform.position);
+				if (d < distance) {
+					distance = d;
+					bestTarget = potentialTarget;
 				}
-			} else {
-				Debug.Log ("Null? " + obj);
 			}
+
 		}
 		target = bestTarget;
 	}
 
 	bool isValidTarget (GameObject obj)
 	{
-		return entity.GetComponent<Entity> ().IsValidTarget (obj);
+		return Entity.IsEntity (obj) && entity.GetComponent<Entity> ().IsValidTarget (obj);
 	}
 
 	void OnTriggerEnter (Collider other)
 	{
+		//.Log ("Object entered -> " + other + "  Is valid -> " + isValidTarget (other.gameObject));
 		if (!targetList.Contains (other.gameObject) && isValidTarget (other.gameObject)) {
 			targetList.Add (other.gameObject);
 		}

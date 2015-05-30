@@ -11,7 +11,7 @@ public class AITurret : MonoBehaviour
 
 	public float speed = 3f;
 	public float turnSpeed = 10f;
-	public float firingAngle = .04f;
+	public float firingAngle = 3f;
 	public int targetLostSeconds = 10;
 	public int targetFindDelay = 2;
 	
@@ -45,8 +45,9 @@ public class AITurret : MonoBehaviour
 		if (isTargetValid ()) {
 			targetLostTicks = targetLostSeconds;
 			desiredRotation = Quaternion.LookRotation (target.transform.position - transform.position).eulerAngles;
-
-			cannon.GetComponent<AICannon> ().fire = Vector3.Distance (desiredRotation, new Vector3 (cannon.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z)) <= firingAngle;
+			float angleDistance = Vector3.Distance (desiredRotation, new Vector3 (cannon.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z));
+			//Debug.Log ("Distance " + angleDistance);
+			cannon.GetComponent<AICannon> ().fire = angleDistance <= firingAngle;
 			//Debug.Log (desiredRotation + "   T:" + transform.eulerAngles + "  C:" + cannon.eulerAngles + "  F:" + cannon.GetComponent<AICannon> ().fire + "  CF:" + cannon.GetComponent<AICannon> ().CanFire ());
 		} else {
 			//If target is not valid count down until target lost

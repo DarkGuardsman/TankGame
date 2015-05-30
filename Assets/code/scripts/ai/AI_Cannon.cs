@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AI_Cannon : Cannon {
-
+public class AI_Cannon : Cannon
+{
 	public bool fire = false;
 
-	protected override bool userClickFire()
+	public override bool ShouldFire ()
 	{
 		return fire;
 	}

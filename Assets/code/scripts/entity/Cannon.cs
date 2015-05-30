@@ -3,8 +3,8 @@ using System.Collections;
 /// <summary>
 /// Basic gun behavior script. Includes firing delay, clip size, and reload time
 /// </summary>
-public abstract class Cannon : MonoBehaviour {
-
+public abstract class Cannon : MonoBehaviour
+{
 	/// <summary>
 	/// The game object that will take credit for firing the bullet
 	/// </summary>
@@ -19,11 +19,15 @@ public abstract class Cannon : MonoBehaviour {
 	public GameObject bulletPrefab;
 	
 	[HideInInspector]
-	public float firingDelayTicks = 0;
+	public float
+		firingDelayTicks = 0;
 	[HideInInspector]
-	public float reloadDelayTicks = 0;
+	public float
+		reloadDelayTicks = 0;
 	[HideInInspector]
-	public int roundsLeft = 0;
+	public int
+		roundsLeft = 0;
+
 
 	//Ammount of ammo in the clip
 	public int ammoPerReload = 1;
@@ -35,55 +39,55 @@ public abstract class Cannon : MonoBehaviour {
 	public float bulletForce = 1000f;
 	
 	public bool fullAuto = false;
+	public bool unlimitedAmmo = false;
 	
 	// Update is called once per frame
-	protected virtual void Update () 
-	{                
-		if (roundsLeft > 0) 
-		{
+	protected virtual void Update ()
+	{        
+		if (ShouldFire ()) {
+			if (CanFire ()) {
+				Fire ();
+			} else {
+				//TODO play empty audio for effect
+			}
+		}
+	}
+
+	protected virtual void FixedUpdate ()
+	{
+		if (unlimitedAmmo || roundsLeft > 0) {
 			//Firing delay
-			if (firingDelayTicks <= 0) 
-			{
-				if (userClickFire()) 
-				{
-					Fire ();
-					roundsLeft--;
-				}
-			} 
-			else 
-			{
-				if (userClickFire()) 
-				{
-					//TODO play weapon click audio
-				}
+			if (firingDelayTicks > 0) {
 				firingDelayTicks -= Time.deltaTime;
-			}
-			
-			//Starts reloading process
-			if(roundsLeft <= 0)
-			{
-				reloadDelayTicks = reloadSpeedSeconds;
-			}
-		} 
-		else if (reloadDelayTicks <= 0) 
-		{
+			}	
+		} else if (reloadDelayTicks <= 0) {
 			roundsLeft = ammoPerReload;
-		} 
-		else 
-		{
+		} else {
 			reloadDelayTicks -= Time.deltaTime;
 		}
 	}
-	
-	protected abstract bool userClickFire ();
-	
-	protected virtual void Fire()
+
+	public virtual bool CanFire ()
 	{
+		return (unlimitedAmmo || roundsLeft > 0) && firingDelayTicks <= 0;
+	}
+	
+	public abstract bool ShouldFire ();
+	
+	protected virtual void Fire ()
+	{
+		if (!unlimitedAmmo) {
+			roundsLeft--;
+			if (roundsLeft <= 0) {
+				reloadDelayTicks = reloadSpeedSeconds;
+			}
+		}
+
 		//TODO play firing audio
 		firingDelayTicks = firingDelaySeconds;
-		GameObject bullet = Instantiate(bulletPrefab, firingNode.transform.position, Quaternion.identity) as GameObject;
+		GameObject bullet = Instantiate (bulletPrefab, firingNode.transform.position, Quaternion.identity) as GameObject;
 		bullet.transform.rotation = transform.rotation;
-		bullet.GetComponent<Rigidbody>().AddRelativeForce (0f, 0f, bulletForce);
+		bullet.GetComponent<Rigidbody> ().AddRelativeForce (0f, 0f, bulletForce);
 		bullet.GetComponent<Bullet> ().shooter = shooter;
 	}
 }

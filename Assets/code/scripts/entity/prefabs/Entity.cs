@@ -1,78 +1,115 @@
 ﻿using UnityEngine;
 using System.Collections;
 using BuiltBroken.Damage;
+using BuiltBroken;
 /// <summary>
 /// Basic gameobject that can take damage
 /// </summary>
-public class Entity : MonoBehaviour, IEntity {
-
+public class Entity : MonoBehaviour, IEntity
+{
 	public float hp = 1;
 	public int deathTicks = -10;
 	public bool alive = true;
 
+	public TEAM team = TEAM.OTHER;
+
+	protected virtual void Awake ()
+	{
+		switch (team) {
+		case TEAM.BLUE:
+			SetBodyColor (Color.blue);
+			break;
+		case TEAM.RED:
+			SetBodyColor (Color.red);
+			break;
+		}
+	}
+
+	protected virtual void Start ()
+	{
+		
+	}
+
+	protected virtual void SetBodyColor (Color color)
+	{
+
+	}
+
 	// Update is called once per frame
-	protected virtual void Update () {
-		if(hp <= 0 && alive)
-		{
+	protected virtual void Update ()
+	{
+		if (hp <= 0 && alive) {
 			alive = false;
-			OnDeath();
+			OnDeath ();
 		}
 
-		if(isDead()) {
-			if(deathTicks != -10)
-			{
+		if (isDead ()) {
+			if (deathTicks != -10) {
 				deathTicks--;
-				if(deathTicks <= 0)
-				{
-					BeforeDestroyed();
-					Destroy(gameObject);
+				if (deathTicks <= 0) {
+					BeforeDestroyed ();
+					Destroy (gameObject);
 				}
 			}
 		}
 	}
 
-	public virtual float getHeath()
+	public virtual float getHeath ()
 	{
 		return hp;
 	}
 
-	public virtual void setHeath(float amount)
+	public virtual void setHeath (float amount)
 	{
 		hp = amount;
 	}
 
-	public virtual bool damageEntity(DamageSource source, float damage)
+	public virtual bool damageEntity (DamageSource source, float damage)
 	{
 		if (alive) {
-			setHeath(getHeath() - damage);
+			setHeath (getHeath () - damage);
 			return true;
 		}
 		return false;
 	}
 
-	public virtual bool isDead()
+	public virtual bool isDead ()
 	{
 		return !alive;
+	}
+
+	public TEAM getTeam ()
+	{
+		return team;
+	}
+
+	public virtual bool IsValidTarget (GameObject obj)
+	{
+		if (IsEntity (obj)) {
+			IEntity ent = obj.GetComponents<IEntity> ();
+			return ent != null && !ent.isDead () && ent.getTeam != team;
+		}
+		return false;
 	}
 
 	/// <summary>
 	/// Called the first tick after the entity has died
 	/// </summary>
-	protected virtual void OnDeath()
+	protected virtual void OnDeath ()
 	{
 		if (gameObject.tag == "Player") {
 			//Disable camera
 			Camera.main.enabled = false;
-			
+			Destroy (gameObject);			
 			//Create new camera object for the player
-			Instantiate(Resources.Load("camera_dummy"), transform.position, Quaternion.identity);
+			Instantiate (Resources.Load ("player/camera_dummy"), transform.position, Quaternion.identity);
 		}
 	}
 
 	/// <summary>
 	/// Called in the death update loop right before the game object is destoryed
 	/// </summary>
-	protected virtual void BeforeDestroyed()
+	protected virtual void BeforeDestroyed ()
 	{
 
 	}
@@ -83,21 +120,19 @@ public class Entity : MonoBehaviour, IEntity {
 	/// <param name="target">Game object to look for an IEntity script on</param>
 	/// <param name="source">Type of damage and it's source object</param>
 	/// <param name="damage">amount of damage to doDamage.</param>
-	protected virtual bool AttackGameObjectOnly(GameObject target, DamageSource source, float damage)
+	protected virtual bool AttackGameObjectOnly (GameObject target, DamageSource source, float damage)
 	{
 		bool damagedTarget = false;
-		IEntity[] scripts = target.GetComponents<IEntity>();
-		for(int i = 0; i < scripts.Length; i++)
-		{
-			if(scripts[i].damageEntity(source, damage))
-			{
+		IEntity[] scripts = target.GetComponents<IEntity> ();
+		for (int i = 0; i < scripts.Length; i++) {
+			if (scripts [i].damageEntity (source, damage)) {
 				damagedTarget = true;
 			}
 		}
 		return damagedTarget;
 	}
 
-	public static bool IsEntity(GameObject obj)
+	public static bool IsEntity (GameObject obj)
 	{
 		return obj.tag == "Entity" || obj.tag == "Player";
 	}
@@ -109,16 +144,14 @@ public class Entity : MonoBehaviour, IEntity {
 	/// <param name="target">Game object to look for an IEntity script on</param>
 	/// <param name="source">Type of damage and it's source object</param>
 	/// <param name="damage">amount of damage to doDamage.</param>
-	protected virtual bool AttackGameObject(GameObject target, DamageSource source, float damage)
+	protected virtual bool AttackGameObject (GameObject target, DamageSource source, float damage)
 	{
 		GameObject parent = target;
-		while (parent != null) 
-		{
-			if (IsEntity(target) && AttackGameObjectOnly(target, source, damage)) {
+		while (parent != null) {
+			if (IsEntity (target) && AttackGameObjectOnly (target, source, damage)) {
 				return true;
 			}
-			if(parent.transform == null || parent.transform.parent == null)
-			{
+			if (parent.transform == null || parent.transform.parent == null) {
 				return false;
 			}
 			parent = parent.transform.parent.gameObject;

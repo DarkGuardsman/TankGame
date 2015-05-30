@@ -6,6 +6,7 @@ public class AI_Turret : MonoBehaviour
 {
 
 	public GameObject target;
+	public GameObject entity;
 	public Transform cannon;
 
 	public float speed = 3f;
@@ -91,7 +92,7 @@ public class AI_Turret : MonoBehaviour
 
 	bool isValidTarget (GameObject obj)
 	{
-		return Entity.IsEntity (obj);
+		return entity.GetComponent<Entity> ().IsValidTarget (obj);
 	}
 
 	void OnTriggerEnter (Collider other)

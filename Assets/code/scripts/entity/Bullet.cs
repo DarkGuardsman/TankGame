@@ -4,18 +4,12 @@ using BuiltBroken.Damage;
 
 public class Bullet : Entity
 {
-
 	public GameObject shooter;
 	public float damage = 25f;
 	public int MAX_TICKS = 10000;
 	private int ticks = 0;
 	private Vector3 prev_pos;
 
-	// Use this for initialization
-	void Start ()
-	{
-	}
-	
 	// Update is called once per frame
 	void FixedUpdate ()
 	{

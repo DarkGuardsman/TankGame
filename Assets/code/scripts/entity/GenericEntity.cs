@@ -5,13 +5,23 @@ public class GenericEntity : Entity
 {
 	//Objects to be recolored when SetBodyColor is called
 	public GameObject[] colorObjects;
+	public GameObject[] colorObjects2;
 
 	public GameObject deadVersion;
 
-	protected override void SetBodyColor (Color color)
+	protected override void SetPrimaryBodyColor (Color color)
 	{
 		if (colorObjects != null) {
 			foreach (GameObject obj in colorObjects) {
+				obj.GetComponent<Renderer> ().material.color = color;
+			}
+		}
+	}
+
+	protected override void SetSecondaryBodyColor (Color color)
+	{
+		if (colorObjects2 != null) {
+			foreach (GameObject obj in colorObjects2) {
 				obj.GetComponent<Renderer> ().material.color = color;
 			}
 		}

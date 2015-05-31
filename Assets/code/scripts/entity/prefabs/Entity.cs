@@ -1,26 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 using BuiltBroken.Damage;
-using BuiltBroken;
+using BuiltBroken.Team;
 /// <summary>
 /// Basic gameobject that can take damage
 /// </summary>
 public class Entity : MonoBehaviour, IEntity
 {
 	public float hp = 1;
+	public float max_hp = 1;
 	public int deathTicks = -10;
 	public bool alive = true;
 
 	public TEAM team = TEAM.OTHER;
+	protected TeamManager teamManager;
 
 	protected virtual void Awake ()
 	{
+		teamManager = GameObject.FindWithTag ("World").GetComponent<TeamManager> ();
 		switch (team) {
 		case TEAM.BLUE:
-			SetBodyColor (Color.blue);
+			SetPrimaryBodyColor (Color.blue);
+			SetSecondaryBodyColor (new Color (28, 57, 90));
 			break;
 		case TEAM.RED:
-			SetBodyColor (Color.red);
+			SetPrimaryBodyColor (Color.red);
+			SetSecondaryBodyColor (Color.black);
 			break;
 		}
 	}
@@ -30,9 +35,14 @@ public class Entity : MonoBehaviour, IEntity
 		
 	}
 
-	protected virtual void SetBodyColor (Color color)
+	protected virtual void SetPrimaryBodyColor (Color color)
 	{
 
+	}
+
+	protected virtual void SetSecondaryBodyColor (Color color)
+	{
+		
 	}
 
 	// Update is called once per frame
@@ -57,6 +67,11 @@ public class Entity : MonoBehaviour, IEntity
 	public virtual float getHeath ()
 	{
 		return hp;
+	}
+
+	public virtual float getMaxHeath ()
+	{
+		return max_hp;
 	}
 
 	public virtual void setHeath (float amount)
@@ -104,6 +119,12 @@ public class Entity : MonoBehaviour, IEntity
 			//Create new camera object for the player
 			Instantiate (Resources.Load ("player/camera_dummy"), transform.position, Quaternion.identity);
 		}
+	}
+
+	//Called by unity before the script is destoryed
+	protected virtual void OnDestroy ()
+	{
+		print ("Script was destroyed");
 	}
 
 	/// <summary>

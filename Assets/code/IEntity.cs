@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using BuiltBroken.Damage;
-using BuiltBroken;
+using BuiltBroken.Team;
 /// <summary>
 /// Basic interface to be aplied gameobjects that can take damage
 /// </summary>
@@ -15,6 +15,11 @@ public interface IEntity
 	///<remarks>Can be used to access the heath of the entity</remarks>
 	///<returns>float value of the hp</returns>
 	float getHeath ();
+
+	///<summary>
+	///Amount of Heath the entity has max
+	///</summary>
+	float getMaxHeath ();
 
 	///<summary>
 	///Directly sets the heath value of the entity

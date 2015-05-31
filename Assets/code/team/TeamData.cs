@@ -8,13 +8,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
-namespace BuiltBroken
+using UnityEngine;
+
+
+namespace BuiltBroken.Team
 {
-	public enum TEAM
+	//http://www.rapidtables.com/web/color/RGB_Color.htm
+	public class TeamData
 	{
-		BLUE,
-		RED,
-		OTHER
+		public Color primary;
+		public Color secondary;
+		public String name;
 	}
 }
 

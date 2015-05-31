@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//TODO trash
 public class Tank : Entity
 {	
 	private GameObject turret;
 	private GameObject hull;
 	private GameObject cannon;
 
-	void Awake ()
+	protected override void Awake ()
 	{
+		base.Awake ();
 		//TODO replace with iterator that finds all materials and replaces with grey
 		turret = gameObject.transform.FindChild ("turret").gameObject;
 		hull = gameObject.transform.FindChild ("hull").gameObject;

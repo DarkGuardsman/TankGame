@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PTurret : MonoBehaviour {
+public class PTurret : MonoBehaviour
+{
 
 	public float XSensitivity = 2f;
 	public float YSensitivity = 2f;
@@ -11,9 +12,10 @@ public class PTurret : MonoBehaviour {
 	private Quaternion m_turretTargetRot;
 	private GameObject cannonObject;
 	private float rotationX;
+	private float rotationY;
 
 
-	void Awake()
+	void Awake ()
 	{
 		Screen.lockCursor = true;
 		m_turretTargetRot = transform.localRotation;
@@ -22,19 +24,19 @@ public class PTurret : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void Update ()
 	{
 		//Handles mouse movement for turret rotation
-		float yRot = Input.GetAxis("Mouse X") * XSensitivity;
-		float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
+		float yRot = Input.GetAxis ("Mouse X") * XSensitivity;
+		float xRot = Input.GetAxis ("Mouse Y") * YSensitivity;
 
 		// Rotates the turret around the Y axis
-		m_turretTargetRot *= Quaternion.Euler (0f, yRot, 0f);
-		transform.localRotation = m_turretTargetRot;
+		rotationY += yRot;
+		transform.localEulerAngles = new Vector3 (transform.localEulerAngles.x, rotationY, transform.localEulerAngles.z);
 
 		//Rotates the barrel
 		rotationX += xRot;
 		rotationX = Mathf.Clamp (rotationX, MinCannonPitch, MaxCannonPitch);             
-		cannonObject.transform.localEulerAngles = new Vector3(-rotationX, cannonObject.transform.localEulerAngles.y, cannonObject.transform.localEulerAngles.z);
+		cannonObject.transform.localEulerAngles = new Vector3 (-rotationX, cannonObject.transform.localEulerAngles.y, cannonObject.transform.localEulerAngles.z);
 	}
 }
